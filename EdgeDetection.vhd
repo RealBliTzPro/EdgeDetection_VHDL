@@ -97,12 +97,22 @@ begin
                     if temp_y = to_signed(1, 16) then
                         -- Save the first occurrence
                         if first_i = -1 then
-                            first_i := i+1;
+						if i-1=0 then
+                            first_i := i;
                             first_j := j+1;
+							else
+							first_i := i+1;
+                            first_j := j+1;
+							end if;
                         end if;
                         -- Save the last occurrence
-                        last_i := i-1;
-                        last_j := j-1;
+						if i+1 = 9 then
+							last_i := i;
+							last_j := j-1;
+						else
+							last_i := i-1;
+							last_j := j-1;
+						end if;
                     end if;
                 end loop;
             end loop;
