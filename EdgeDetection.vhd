@@ -87,7 +87,7 @@ begin
                               (imageMatrix(i+1, j+1) * to_signed(1, 8));
 
                     -- Thresholding: Set result based on the value of temp_y
-                    if temp_y < to_signed(70, 16) then
+                     if temp_y < to_signed(50, 16) and temp_y > to_signed(-50,16) then
                         temp_y := to_signed(0, 16);  -- Set to 0 if less than 130
                     else
                         temp_y := to_signed(1, 16);  -- Set to 1 if greater or equal to 130
@@ -97,12 +97,12 @@ begin
                     if temp_y = to_signed(1, 16) then
                         -- Save the first occurrence
                         if first_i = -1 then
-                            first_i := i;
-                            first_j := j;
+                            first_i := i+1;
+                            first_j := j+1;
                         end if;
                         -- Save the last occurrence
-                        last_i := i;
-                        last_j := j;
+                        last_i := i-1;
+                        last_j := j-1;
                     end if;
                 end loop;
             end loop;
