@@ -98,7 +98,7 @@ begin
                     if temp_y = to_signed(1, 16) then
                         -- Save the first occurrence
                         if first_i = -1 then
-						tempValue = (imageMatrix(i, j+1) - imageMatrix(i, j));
+						tempValue := (imageMatrix(i, j+1) - imageMatrix(i, j));
 						if i-1=0 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
                             first_i := i;
                             first_j := j+1;
@@ -108,7 +108,7 @@ begin
 							end if;
                         end if;
                         -- Save the last occurrence
-						tempValue= imageMatrix(i, j-1) - imageMatrix(i, j);
+						tempValue := imageMatrix(i, j-1) - imageMatrix(i, j);
 						if i+1 = 9 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
 							last_i := i;
 							last_j := j-1;
