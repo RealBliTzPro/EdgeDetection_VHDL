@@ -70,6 +70,7 @@ begin
         variable i, j : integer;
         variable first_i, first_j : integer := -1; -- Initialize with invalid values
         variable last_i, last_j : integer := -1;  -- Initialize with invalid values
+		Variable tempValue : signed(7 downto 0);
     begin
         if rising_edge(clk) then
             -- Loop through the image matrix (excluding boundary)
@@ -97,7 +98,8 @@ begin
                     if temp_y = to_signed(1, 16) then
                         -- Save the first occurrence
                         if first_i = -1 then
-						if i-1=0 and ((imageMatrix(i, j+1) - imageMatrix(i, j)) > to_signed(70, 8) or (imageMatrix(i, j+1) - imageMatrix(i, j)) < to_signed(-70, 8) ) then
+						tempValue = (imageMatrix(i, j+1) - imageMatrix(i, j));
+						if i-1=0 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
                             first_i := i;
                             first_j := j+1;
 							else
@@ -106,7 +108,8 @@ begin
 							end if;
                         end if;
                         -- Save the last occurrence
-						if i+1 = 9 and ((imageMatrix(i, j-1) - imageMatrix(i, j)) > to_signed(70, 8) or (imageMatrix(i, j-1) - imageMatrix(i, j)) < to_signed(-70, 8) ) then
+						tempValue= imageMatrix(i, j-1) - imageMatrix(i, j);
+						if i+1 = 9 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
 							last_i := i;
 							last_j := j-1;
 						else
