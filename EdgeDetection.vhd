@@ -26,22 +26,21 @@ architecture arch of edgeDetection is
     );
 
     -- Define a matrix of signed 8-bit numbers (10x10)
-    type Matrix is array(0 to 9, 0 to 9) of signed(7 downto 0);
+    type Matrix is array(0 to 9, 0 to 9) of signed(8 downto 0);
 
     -- Declare the signal for the image matrix (input image data)
     signal imageMatrix : Matrix := (
-        (to_signed(194, 8), to_signed(183, 8), to_signed(185, 8), to_signed(206, 8), to_signed(225, 8), to_signed(202, 8), to_signed(227, 8), to_signed(202, 8), to_signed(212, 8), to_signed(207, 8)),
-        (to_signed(207, 8), to_signed(216, 8), to_signed(185, 8), to_signed(204, 8), to_signed(200, 8), to_signed(212, 8), to_signed(189, 8), to_signed(224, 8), to_signed(191, 8), to_signed(218, 8)),
-        (to_signed(224, 8), to_signed(224, 8), to_signed(220, 8), to_signed(191, 8), to_signed(203, 8), to_signed(183, 8), to_signed(208, 8), to_signed(180, 8), to_signed(186, 8), to_signed(209, 8)),
-        (to_signed(210, 8), to_signed(216, 8), to_signed(208, 8), to_signed(229, 8), to_signed(214, 8), to_signed(214, 8), to_signed(78, 8), to_signed(186, 8), to_signed(183, 8), to_signed(192, 8)),
-        (to_signed(221, 8), to_signed(208, 8), to_signed(193, 8), to_signed(187, 8), to_signed(185, 8), to_signed(224, 8), to_signed(55, 8), to_signed(180, 8), to_signed(183, 8), to_signed(199, 8)),
-        (to_signed(211, 8), to_signed(211, 8), to_signed(229, 8), to_signed(182, 8), to_signed(199, 8), to_signed(189, 8), to_signed(91, 8), to_signed(204, 8), to_signed(227, 8), to_signed(210, 8)),
-        (to_signed(206, 8), to_signed(183, 8), to_signed(191, 8), to_signed(228, 8), to_signed(183, 8), to_signed(190, 8), to_signed(41, 8), to_signed(226, 8), to_signed(180, 8), to_signed(218, 8)),
-        (to_signed(223, 8), to_signed(209, 8), to_signed(206, 8), to_signed(203, 8), to_signed(196, 8), to_signed(224, 8), to_signed(12, 8), to_signed(224, 8), to_signed(212, 8), to_signed(212, 8)),
-        (to_signed(195, 8), to_signed(202, 8), to_signed(199, 8), to_signed(219, 8), to_signed(192, 8), to_signed(203, 8), to_signed(31, 8), to_signed(213, 8), to_signed(227, 8), to_signed(186, 8)),
-        (to_signed(209, 8), to_signed(191, 8), to_signed(201, 8), to_signed(196, 8), to_signed(201, 8), to_signed(220, 8), to_signed(189, 8), to_signed(211, 8), to_signed(223, 8), to_signed(220, 8))
+        (to_signed(194, 9), to_signed(183, 9), to_signed(185, 9), to_signed(206, 9), to_signed(225, 9), to_signed(202, 9), to_signed(227, 9), to_signed(202, 9), to_signed(212, 9), to_signed(207, 9)),
+        (to_signed(207, 9), to_signed(216, 9), to_signed(185, 9), to_signed(204, 9), to_signed(200, 9), to_signed(212, 9), to_signed(189, 9), to_signed(224, 9), to_signed(191, 9), to_signed(218, 9)),
+        (to_signed(224, 9), to_signed(224, 9), to_signed(220, 9), to_signed(191, 9), to_signed(203, 9), to_signed(183, 9), to_signed(208, 9), to_signed(180, 9), to_signed(186, 9), to_signed(209, 9)),
+        (to_signed(210, 9), to_signed(216, 9), to_signed(208, 9), to_signed(229, 9), to_signed(214, 9), to_signed(214, 9), to_signed(78, 9), to_signed(186, 9), to_signed(183, 9), to_signed(192, 9)),
+        (to_signed(221, 9), to_signed(208, 9), to_signed(193, 9), to_signed(187, 9), to_signed(185, 9), to_signed(224, 9), to_signed(55, 9), to_signed(180, 9), to_signed(183, 9), to_signed(199, 9)),
+        (to_signed(211, 9), to_signed(211, 9), to_signed(229, 9), to_signed(182, 9), to_signed(199, 9), to_signed(189, 9), to_signed(91, 9), to_signed(204, 9), to_signed(227, 9), to_signed(210, 9)),
+        (to_signed(206, 9), to_signed(183, 9), to_signed(191, 9), to_signed(228, 9), to_signed(183, 9), to_signed(190, 9), to_signed(41, 9), to_signed(226, 9), to_signed(180, 9), to_signed(218, 9)),
+        (to_signed(223, 9), to_signed(209, 9), to_signed(206, 9), to_signed(203, 9), to_signed(196, 9), to_signed(224, 9), to_signed(12, 9), to_signed(224, 9), to_signed(212, 9), to_signed(212, 9)),
+        (to_signed(195, 9), to_signed(202, 9), to_signed(199, 9), to_signed(219, 9), to_signed(192, 9), to_signed(203, 9), to_signed(31, 9), to_signed(213, 9), to_signed(227, 9), to_signed(186, 9)),
+        (to_signed(209, 9), to_signed(191, 9), to_signed(201, 9), to_signed(196, 9), to_signed(201, 9), to_signed(220, 9), to_signed(189, 9), to_signed(211, 9), to_signed(223, 9), to_signed(220, 9))
     );
-
     -- Hex conversion for 7-segment display
     function to_7seg(hex_val: std_logic_vector(3 downto 0)) return std_logic_vector is
     begin
@@ -66,11 +65,11 @@ architecture arch of edgeDetection is
 begin
     -- Process to apply convolution to the image matrix
     process(clk)
-        variable temp_y : signed(15 downto 0); -- Variable to store the result of convolution for each element
+        variable temp_y : signed(16 downto 0); -- Variable to store the result of convolution for each element
         variable i, j : integer;
         variable first_i, first_j : integer := -1; -- Initialize with invalid values
         variable last_i, last_j : integer := -1;  -- Initialize with invalid values
-		Variable tempValue : signed(7 downto 0);
+		Variable tempValue : signed(9 downto 0);
     begin
         if rising_edge(clk) then
             -- Loop through the image matrix (excluding boundary)
@@ -88,18 +87,18 @@ begin
                               (imageMatrix(i+1, j+1) * to_signed(1, 8));
 
                     -- Thresholding: Set result based on the value of temp_y
-                     if temp_y < to_signed(50, 16) and temp_y > to_signed(-50,16) then
-                        temp_y := to_signed(0, 16);  -- Set to 0 if less than 130
+                     if temp_y < to_signed(50, 17) and temp_y > to_signed(-50,17) then
+                        temp_y := to_signed(0, 17);  -- Set to 0 if less than 130
                     else
-                        temp_y := to_signed(1, 16);  -- Set to 1 if greater or equal to 130
+                        temp_y := to_signed(1, 17);  -- Set to 1 if greater or equal to 130
                     end if;
 
                     -- Check if edge is detected
                     if temp_y = to_signed(1, 16) then
                         -- Save the first occurrence
                         if first_i = -1 then
-						tempValue := (imageMatrix(i, j+1) - imageMatrix(i, j));
-						if i-1=0 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
+						tempValue := (to_signed(0,10))+(imageMatrix(i, j+1) - imageMatrix(i, j));
+						if i-1=0 and ((tempValue) > to_signed(70, 9) or (tempValue) < to_signed(-70, 9) ) then
                             first_i := i;
                             first_j := j+1;
 							else
@@ -108,8 +107,8 @@ begin
 							end if;
                         end if;
                         -- Save the last occurrence
-						tempValue := imageMatrix(i, j-1) - imageMatrix(i, j);
-						if i+1 = 9 and ((tempValue) > to_signed(70, 8) or (tempValue) < to_signed(-70, 8) ) then
+						tempValue :=(to_signed(0,10))+ imageMatrix(i, j-1) - imageMatrix(i, j);
+						if i+1 = 9 and ((tempValue) > to_signed(70, 9) or (tempValue) < to_signed(-70, 9) ) then
 							last_i := i;
 							last_j := j-1;
 						else
